@@ -1,0 +1,12 @@
+1、读取后台网站地址，
+请求网站下面的/zb_users/plugin/baiduziyuan/sitemap.php
+
+只选择文章，然后生成sitemap
+
+生成完毕后，读取网站根目录下面的：sitemap.xml。
+
+根据sitemap.xml，提取里面的url。
+
+把url推送到 网站对应的百度接口。每个网站的接口需要自己设置。所以在网站后台的网站设置，需要加一个字段（百度接口）
+
+例如bxzphz.cn 的网站接口是：http://data.zz.baidu.com/urls?site=www.bxzphz.cn&token=x0SdnzW6BBEpZIap

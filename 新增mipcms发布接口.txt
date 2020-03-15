@@ -1,0 +1,45 @@
+CMS类型：MIPCMS
+
+接口地址：网站链接/collect/ApiUserHuochetou/articleAdd
+
+字段：
+password：www.mipjz.com
+titile：调用文章标题
+content：调用文章内容
+cid：（调用后台填的栏目id，注意，这里可以为空）
+uid：（调用后台填的作者id，注意，这里可以为空）
+tags：文章标签，用英文逗号隔开，（文章标签 由文章进行关键词提取3个，提取代码附在后面）
+
+
+文章关键词提取代码：（用了结巴分词https://github.com/fxsjy/jieba）
+
+
+# 文章关键词挖掘
+def text_to_keywords(text):
+    keywords = jieba.analyse.extract_tags(text,topK=5,withWeight=False)
+    keywords_length = []
+    for keyword in keywords:
+        length = len(keyword)
+        utf8_length = len(keyword.encode('utf-8'))
+        length = (utf8_length - length) / 2 + length
+        keywords_length.append([int(length),0])
+    keywords_str = []
+    for list_num in range(len(keywords_length)):
+        if keywords_length[list_num][1] == 0:
+            keywords_length[list_num][1] = 1
+            for list_num2 in range(len(keywords_length)):
+                if keywords_length[list_num2][1] == 0:
+                    sum_len = keywords_length[list_num2][1] + keywords_length[list_num][1]
+                    if sum_len == 5:
+                        str_keyword = keywords[list_num] + " " + keywords[list_num2]
+                        keywords_length[list_num2][1] = 1
+                        keywords_str.append(str_keyword)
+                        break
+                    elif sum_len < 6:
+                        str_keyword = keywords[list_num] + " " + keywords[list_num2]
+                        keywords_length[list_num2][1] = 1
+                        keywords_str.append(str_keyword)
+                        break
+    return keywords_str
+
+
